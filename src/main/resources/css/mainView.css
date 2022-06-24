@@ -1,0 +1,54 @@
+/*
+ * JavaFX CSS
+ * 
+ * .Styleclass selector
+ * 
+ * #ID selcector
+ * 
+ * :Pseudo classes
+ * 
+ * Stylesheet CSS file for differents nodes on the main View Stage, these stage will
+ * showing when application starts.
+ */
+ 
+/*
+ * Use ID selecetor for style button's'
+ * 
+*/
+#btnStart {
+  	
+ 	-fx-background-color: transparent;
+ 	-fx-background-image: url("../images/start.png");
+ 	-fx-background-repeat: no-repeat;
+}
+
+#btnStart:hover {
+	-fx-scale-x: 1.10;
+	-fx-scale-y: 1.10;
+}
+
+#btnStart:pressed {
+	-fx-background-color: 
+        #3c7fb1,
+        linear-gradient(#fafdfe, #e8f5fc),
+        linear-gradient(#eaf6fd 0%, #d9f0fc 49%, #bee6fd 50%, #a7d9f5 100%);
+}
+
+#btnStop {
+  	
+ 	-fx-background-color: transparent;
+ 	-fx-background-image: url("../images/stop.png");
+ 	-fx-background-repeat: no-repeat;
+}
+
+#btnStop:hover {
+	-fx-scale-x: 1.10;
+	-fx-scale-y: 1.10;
+}
+
+#btnStop:pressed {
+	-fx-background-color: 
+        #3c7fb1,
+        linear-gradient(#fafdfe, #e8f5fc),
+        linear-gradient(#eaf6fd 0%, #d9f0fc 49%, #bee6fd 50%, #a7d9f5 100%);
+}

@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>myjfxprojects</groupId>
+	<artifactId>networkScan</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Simple-Network-Scanner</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.java.version>18</project.java.version>
+		<maven.compiler.release>${project.java.version}</maven.compiler.release>
+		<maven.compiler.source>${project.java.version}</maven.compiler.source>
+		<maven.compiler.target>${project.java.version}</maven.compiler.target>
+		<maven.compiler.encoding>${project.build.sourceEncoding}</maven.compiler.encoding>
+		<maven.resources.encoding>${project.build.sourceEncoding}</maven.resources.encoding>
+		<openJfxVersion>18.0.1</openJfxVersion>
+		<fileVersionForExe>1.0.0.0</fileVersionForExe>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>${openJfxVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>${openJfxVersion}</version>
+		</dependency>
+		<!-- Cross-platform dependencies for the windows platform -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-graphics</artifactId>
+			<version>${openJfxVersion}</version>
+			<classifier>win</classifier>
+		</dependency>
+	</dependencies>
+</project>
