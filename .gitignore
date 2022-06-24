@@ -1,8 +1,9 @@
 # Compiled class file
 *.class
 
-# Log file
+# ignore all logfiles and ziped logfiles
 *.log
+*.log.gz
 
 # BlueJ files
 *.ctxt
