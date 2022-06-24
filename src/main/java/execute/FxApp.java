@@ -7,6 +7,7 @@ import common.FxmlUtil;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
@@ -54,6 +55,9 @@ public class FxApp extends Application {
     		// set minimum size of the main view
     		primaryStage.setMinHeight(200.0);
     		primaryStage.setMinWidth(350.0);
+    		
+    		// set main view icon
+        	primaryStage.getIcons().add(new Image("images/network.png"));
     		
     		primaryStage.setTitle(DataBean.APP_NAME);
     		
