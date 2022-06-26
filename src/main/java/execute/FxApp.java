@@ -22,8 +22,16 @@ public class FxApp extends Application {
 	
 	@Override
 	public void init() {
-		// before application start, check the availability of the local host IP address
-		NetworkScan.getInstance().getLocalHostIp();
+		// before application start, check the availability of the local host IP/MAC address
+		try {
+			
+			NetworkScan.getInstance().initLocalHostData();
+			
+		} catch (Exception e) {
+			
+			// TODO Log the exception and display a error information
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

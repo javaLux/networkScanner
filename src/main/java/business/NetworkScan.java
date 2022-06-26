@@ -1,8 +1,7 @@
 package business;
 
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.NetworkInterface;
 
 /**
  * Class to manage the network scan operations.
@@ -19,7 +18,13 @@ public class NetworkScan {
 	final int timeOut = 5000;
 	
 	// byte array for the IPv4 address of the local host
-	private byte[] ip = null;
+	private byte[] rawIpLocalHost = null;
+	
+	// String representation of the local host IP address
+	private String ipLocalHost = "";
+	
+	// MAC address local host
+	private String macAddressLocalHost = "";
 	
 	
 	// private constructor
@@ -38,16 +43,36 @@ public class NetworkScan {
 	}
 	
 	/**
-	 * Method to get IP address from local host.
+	 * Method to get basic network information from the local host.
+	 * 
+	 * @throws Exception 
 	 */
-	public void getLocalHostIp() {
-		try {
-			this.ip = Inet4Address.getLocalHost().getAddress();
-		} catch (UnknownHostException e) {
+	public void initLocalHostData() throws Exception {
+		
+			InetAddress iNetAd = InetAddress.getLocalHost();
 			
-			// TODO log exception and info at user, abort program
-			e.printStackTrace();
-		}
+			// get raw data for the local host IP address
+			this.rawIpLocalHost = iNetAd.getAddress();
+			
+			// get the string format of the local host IP address
+			this.ipLocalHost = iNetAd.getHostAddress();
+			
+			NetworkInterface netInterface = NetworkInterface.getByInetAddress(iNetAd);
+			
+			if(netInterface != null) {
+				// get MAC from local host
+				byte[] hardwareAddress = netInterface.getHardwareAddress();
+				
+				// format the result in a string representation of an MAC address
+				String[] hexaDecimal = new String[hardwareAddress.length];
+				for (int i = 0; i < hardwareAddress.length; i++) {
+					hexaDecimal[i] = String.format("%02X", hardwareAddress[i]);
+				}
+				this.macAddressLocalHost = String.join("-", hexaDecimal);
+			}
+			else {
+				this.macAddressLocalHost = "Unknown";
+			}			
 	}
 	
 	/**
@@ -59,15 +84,23 @@ public class NetworkScan {
 	public InetAddress scanHostOnNetwork(int hostAddress) throws Exception {
 		
 		// replace the host address from local host with given host address
-		ip[3] = (byte) hostAddress;
+		rawIpLocalHost[3] = (byte) hostAddress;
 		
-        InetAddress address = Inet4Address.getByAddress(ip);
+        InetAddress localIp = InetAddress.getByAddress(rawIpLocalHost);
         
-        if (address.isReachable(timeOut)) {
+        if (localIp.isReachable(timeOut)) {
         	
-        	return address;
+        	return localIp;
         }
         
         return null;
+	}
+
+	public String getIpLocalHost() {
+		return this.ipLocalHost;
+	}
+
+	public String getMacAddressLocalHost() {
+		return this.macAddressLocalHost;
 	}
 }
