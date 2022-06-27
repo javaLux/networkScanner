@@ -33,16 +33,21 @@ public class MainViewApp {
 	
 	// Done image
 	private ImageView imgDone = new ImageView(new Image("/images/done.png"));
+	
+	// Cancel image
+	private ImageView imgCancel = new ImageView(new Image("/images/cancel.png"));
 
 	// Time line to update progress bar
-	Timeline tLineProgressBar = null;
-
+	private Timeline tLineProgressBar = null;
+	
+	
 	/**
 	 * Constructor store an instance of this class in data bean and initialize
 	 * members.
 	 */
 	public MainViewApp() {
 
+		// store instance in data bean
 		dataBean.setMainViewApp(this);
 		this.tLineProgressBar = new Timeline();
 	}
@@ -81,11 +86,15 @@ public class MainViewApp {
 			@Override
 			public void onChanged(Change<? extends ReachableHost> c) {
 				
-				// First:	sort the reachable host list by IP address
-				ObservableList<ReachableHost> sortedList = OwnSortHelper.getInstance().sortReachableHosts(dataBean.getReachableHosts());
-				
-				// Second:	update table view with sorted list
-				dataBean.getMainViewController().getTableView().setItems(sortedList);
+				if(! dataBean.getIsScanAborted().get()) {
+					// First:	sort the reachable host list by IP address
+					ObservableList<ReachableHost> sortedList = OwnSortHelper.getInstance()
+							.sortReachableHosts(dataBean.getReachableHosts());
+					
+					// Second:	update table view with sorted list
+					dataBean.getMainViewController().getTableView().setItems(sortedList);
+				}
+			
 			}
 		});
 		
@@ -95,14 +104,22 @@ public class MainViewApp {
 			@Override
 			public void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
 				
-				// if time line for update progress bar stopped -> then reset thread counter
-				if(newValue == Status.STOPPED) {
+				// if time line for update progress bar was stopped and scan was successfully done
+				if(newValue == Status.STOPPED && dataBean.getThreadCounter().get() == DataBean.MAX_HOST_ADDRESS) {
 					
 					// set property to show only a image on the percent label and add 'done' image to it
 					dataBean.getMainViewController().getLblPercent().setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 					dataBean.getMainViewController().getLblPercent().setGraphic(imgDone);
 					// reactivate button start
 					dataBean.getMainViewController().getBtnStart().setDisable(false);				
+				}
+				// if scan process was aborted by user
+				else if(newValue == Status.STOPPED && dataBean.getIsScanAborted().get()) {
+					// set property to show only a image on the percent label and add 'cancel' image to it
+					dataBean.getMainViewController().getLblPercent().setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+					dataBean.getMainViewController().getLblPercent().setGraphic(imgCancel);
+					// reactivate button start
+					dataBean.getMainViewController().getBtnStart().setDisable(false);
 				}
 			}
 		});
@@ -112,8 +129,27 @@ public class MainViewApp {
 
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				// update label for unknown hosts value
-				dataBean.getMainViewController().getLblUnknownHostValue().setText(newValue.toString());
+				
+				if(! dataBean.getIsScanAborted().get()) {
+					// update label for unknown hosts value
+					dataBean.getMainViewController().getLblUnknownHostValue().setText(newValue.toString());
+				}				
+			}
+		});
+		
+		// add listener to observe changes on the boolean property which indicates if user has scan aborted
+		this.dataBean.getIsScanAborted().addListener(new ChangeListener<Boolean>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				
+				// when user was aborted the current scan
+				if(newValue) {
+					// cancel all background scan services
+					for(Service<Void> service : dataBean.getListOfActiveServices()) {
+						service.cancel();
+					}
+				}
 			}
 		});
 	}
@@ -124,7 +160,7 @@ public class MainViewApp {
 		
 		this.tLineProgressBar.getKeyFrames().add(new KeyFrame(Duration.millis(100.0), event -> {
 			
-			// calculate percent value to update progress bar (value must divided by 100 because only values between 0.0 - 1.0 allowed)
+			// calculate percent value to update progress bar (value must divided by 100 because only values between 0.0 - 1.0 are allowed)
 			double valueProgressBar = dataBean.getThreadCounter().get() / 2.54 / 100;
 			// update progress bar value
 			dataBean.getMainViewController().getProgressBar().setProgress(valueProgressBar);
@@ -142,12 +178,12 @@ public class MainViewApp {
 		
 		// iterate over all possible host ID's in the current network
 		for (int i = 1; i < DataBean.MAX_HOST_ADDRESS + 1; i++) {
-
-			final int j = i;
+			
+			final int hostId = i;
 
 			// IMPORTANT: initialize for each host a new background thread (Service)
 			// to make network scan faster.
-			new Service<Void>() {
+			Service<Void> scanService = new Service<Void>() {
 
 				/**
 				 * Constructor of anonymous class 'Service'
@@ -182,7 +218,7 @@ public class MainViewApp {
 
 							try {
 								// check IP address
-								InetAddress ipAddress = NetworkScan.getInstance().scanHostOnNetwork(j);
+								InetAddress ipAddress = NetworkScan.getInstance().scanHostOnNetwork(hostId);
 								
 								if(ipAddress != null) {
 						        	// when host reachable on the network, put them in the observable list
@@ -202,7 +238,15 @@ public class MainViewApp {
 
 					return task;
 				}
-			}.start();
+			};
+			
+			// store all running background services in the associated list
+			dataBean.getListOfActiveServices().add(scanService);
+			
+			// start background service only if user has not aborted the scan
+			if(! dataBean.getIsScanAborted().get()) {
+				scanService.start();
+			}
 		}
 	}
 	

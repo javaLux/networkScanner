@@ -3,13 +3,19 @@
  */
 package common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import business.MainViewApp;
 import business.ReachableHost;
 import controller.MainViewController;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
 
 /**
  * @author Christian
@@ -20,16 +26,22 @@ public class DataBean {
 	// Singleton instance
 	private static DataBean instance = null;
 	
-	// static fields
+	// START static fields
 	//
 	// Application name
-	public static final String APP_NAME = "Simple-Network-Scanner";
-	
+	public static final String APP_NAME = "Simple-Network-Scanner";	
 	// highest host address (24 bit Suffix) -> class c network
 	public static final int MAX_HOST_ADDRESS = 254;
+	// END static fields
 	
 	// Observable list for the reachable hosts
 	private ObservableList<ReachableHost> reachableHosts = FXCollections.observableArrayList();
+	
+	// Array List for the running background scan services
+	private List<Service<Void>> listOfActiveServices = new ArrayList<>();
+	
+	// boolean property to indicate if scan process was aborted by user
+	private BooleanProperty isScanAborted = new SimpleBooleanProperty(false);
 	
 	// Thread counter for the background threads to scan the network
 	private IntegerProperty threadCounter = new SimpleIntegerProperty(0);
@@ -97,5 +109,13 @@ public class DataBean {
 
 	public IntegerProperty getThreadCounter() {
 		return this.threadCounter;
+	}
+
+	public List<Service<Void>> getListOfActiveServices() {
+		return this.listOfActiveServices;
+	}
+
+	public BooleanProperty getIsScanAborted() {
+		return this.isScanAborted;
 	}
 }

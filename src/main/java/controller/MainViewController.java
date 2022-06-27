@@ -74,15 +74,18 @@ public class MainViewController implements Initializable {
     @FXML
     void btnStartMouseClicked(MouseEvent event) {
     	
+    	// reset boolean property, which indicates the scan process was aborted by user
+    	this.dataBean.getIsScanAborted().set(false);
+    	
     	// make progress bar visible
     	if(! this.dataBean.getMainViewController().getProgressBar().isVisible()) {
     		this.dataBean.getMainViewController().getProgressBar().setVisible(true);
     	}
     	
     	// reset all necessary counters
-		dataBean.resetCounters();
+    	this.dataBean.resetCounters();
 		// set label for unknown hosts again to value 254
-		dataBean.getMainViewController().getLblUnknownHostValue().setText("" + DataBean.MAX_HOST_ADDRESS);
+    	this.dataBean.getMainViewController().getLblUnknownHostValue().setText("" + DataBean.MAX_HOST_ADDRESS);
     	// set property of the percent label to show only text -> to hide 'done' image
     	this.dataBean.getMainViewController().getLblPercent().setContentDisplay(ContentDisplay.TEXT_ONLY);
     	// clear list for reachable hosts to get on each scan process a new result
@@ -90,8 +93,8 @@ public class MainViewController implements Initializable {
     	// clean up table view from last scan results
     	this.dataBean.getMainViewController().getTableView().getItems().clear();
     	// start Time line to update progress bar and start network scan
-    	this.dataBean.getMainViewApp().getTimeLineProgressBar().play();
     	this.dataBean.getMainViewApp().startScan();
+    	this.dataBean.getMainViewApp().getTimeLineProgressBar().play();    	
     	// disable start button until time line line stopped and scan is done
     	this.btnStart.setDisable(true);
     }
@@ -99,7 +102,11 @@ public class MainViewController implements Initializable {
     @FXML
     void btnStopMouseClicked(MouseEvent event) {
     	
-    	System.out.println("Button stop");
+    	// First: set boolean property for aborted scan to true
+    	this.dataBean.getIsScanAborted().set(true);
+    	
+    	// Second: stop time line to updates progress bar
+    	this.dataBean.getMainViewApp().getTimeLineProgressBar().stop();  	
     }
 
 	// GETTER and SETTER
