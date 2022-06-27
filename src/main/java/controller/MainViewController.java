@@ -34,6 +34,15 @@ public class MainViewController implements Initializable {
     private Button btnStop;
 	
 	@FXML
+    private Label lblHostName;
+	
+	@FXML
+    private Label lblLocalHostIP;
+
+    @FXML
+    private Label lblLocalHostMac;
+	    
+	@FXML
 	private Label lblUnknownHostValue;
 
 	@FXML
@@ -65,6 +74,11 @@ public class MainViewController implements Initializable {
     @FXML
     void btnStartMouseClicked(MouseEvent event) {
     	
+    	// make progress bar visible
+    	if(! this.dataBean.getMainViewController().getProgressBar().isVisible()) {
+    		this.dataBean.getMainViewController().getProgressBar().setVisible(true);
+    	}
+    	
     	// reset all necessary counters
 		dataBean.resetCounters();
 		// set label for unknown hosts again to value 254
@@ -95,7 +109,19 @@ public class MainViewController implements Initializable {
 	}
 
 	public Button getBtnStop() {
-		return btnStop;
+		return this.btnStop;
+	}
+
+	public Label getLblHostName() {
+		return this.lblHostName;
+	}
+
+	public Label getLblLocalHostIP() {
+		return this.lblLocalHostIP;
+	}
+
+	public Label getLblLocalHostMac() {
+		return this.lblLocalHostMac;
 	}
 
 	public Label getLblInfo() {
@@ -103,7 +129,7 @@ public class MainViewController implements Initializable {
 	}
 	
 	public Label getLblUnknownHostValue() {
-		return lblUnknownHostValue;
+		return this.lblUnknownHostValue;
 	}
 
 	public Label getLblPercent() {

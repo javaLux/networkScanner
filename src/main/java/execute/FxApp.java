@@ -69,6 +69,11 @@ public class FxApp extends Application {
     		
     		primaryStage.setTitle(DataBean.APP_NAME);
     		
+    		// set basic local host informations
+    		this.dataBean.getMainViewController().getLblHostName().setText(NetworkScan.getInstance().getHostName());
+    		this.dataBean.getMainViewController().getLblLocalHostIP().setText(NetworkScan.getInstance().getIpLocalHost());
+    		this.dataBean.getMainViewController().getLblLocalHostMac().setText(NetworkScan.getInstance().getMacAddressLocalHost());
+    		
     		primaryStage.show();
     	
     	}

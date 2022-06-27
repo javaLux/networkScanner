@@ -20,6 +20,9 @@ public class NetworkScan {
 	// byte array for the IPv4 address of the local host
 	private byte[] rawIpLocalHost = null;
 	
+	// host name of the local host
+	private String hostName = "";
+	
 	// String representation of the local host IP address
 	private String ipLocalHost = "";
 	
@@ -56,6 +59,9 @@ public class NetworkScan {
 			
 			// get the string format of the local host IP address
 			this.ipLocalHost = iNetAd.getHostAddress();
+			
+			// get the host name of the local host
+			this.hostName = iNetAd.getHostName();
 			
 			NetworkInterface netInterface = NetworkInterface.getByInetAddress(iNetAd);
 			
@@ -94,6 +100,12 @@ public class NetworkScan {
         }
         
         return null;
+	}
+
+	// GETTER
+	//
+	public String getHostName() {
+		return this.hostName;
 	}
 
 	public String getIpLocalHost() {
