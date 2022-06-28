@@ -34,6 +34,9 @@ public class MainViewController implements Initializable {
     private Button btnStop;
 	
 	@FXML
+	private Label lblAppStatus;
+	 
+	@FXML
     private Label lblHostName;
 	
 	@FXML
@@ -129,6 +132,10 @@ public class MainViewController implements Initializable {
 
 	public Label getLblLocalHostMac() {
 		return this.lblLocalHostMac;
+	}
+
+	public Label getLblAppStatus() {
+		return this.lblAppStatus;
 	}
 
 	public Label getLblInfo() {

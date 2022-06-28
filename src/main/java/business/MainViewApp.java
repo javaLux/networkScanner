@@ -46,6 +46,10 @@ public class MainViewApp {
 	// Time line to update progress bar
 	private Timeline tLineProgressBar = null;
 	
+	// constants for the program status
+	public static final String stateCompleted 		= "Scan completed";
+	public static final String stateScanning 		= "Scan running";
+	public static final String stateCanceled 		= "Scan canceled";
 	
 	/**
 	 * Constructor store an instance of this class in data bean and initialize
@@ -110,17 +114,29 @@ public class MainViewApp {
 			@Override
 			public void changed(ObservableValue<? extends Status> observable, Status oldValue, Status newValue) {
 				
-				// if time line for update progress bar was stopped and scan was successfully done
+				// when time line is currently running
+				if(newValue == Status.RUNNING && dataBean.getThreadCounter().get() < DataBean.MAX_HOST_ADDRESS) {
+					
+					// update program status label
+					dataBean.getMainViewController().getLblAppStatus().setText(stateScanning);
+				}
+				
+				// if time line for update progress bar was stopped and scan was successfully completed
 				if(newValue == Status.STOPPED && dataBean.getThreadCounter().get() == DataBean.MAX_HOST_ADDRESS) {
 					
+					// update program status label
+					dataBean.getMainViewController().getLblAppStatus().setText(stateCompleted);					
 					// set property to show only a image on the percent label and add 'done' image to it
 					dataBean.getMainViewController().getLblPercent().setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 					dataBean.getMainViewController().getLblPercent().setGraphic(imgDone);
 					// reactivate button start
 					dataBean.getMainViewController().getBtnStart().setDisable(false);				
 				}
-				// if scan process was aborted by user
+				// if scan process was canceled by user
 				else if(newValue == Status.STOPPED && dataBean.getIsScanAborted().get()) {
+					
+					// update program status label
+					dataBean.getMainViewController().getLblAppStatus().setText(stateCanceled);
 					// set property to show only a image on the percent label and add 'cancel' image to it
 					dataBean.getMainViewController().getLblPercent().setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 					dataBean.getMainViewController().getLblPercent().setGraphic(imgCancel);
@@ -255,7 +271,7 @@ public class MainViewApp {
 		}
 	}
 	
-	// GETTER and SETTER
+	// GETTER
 	//
 	public Timeline getTimeLineProgressBar() {
 		return this.tLineProgressBar;
