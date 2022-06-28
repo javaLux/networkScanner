@@ -75,8 +75,8 @@ public class FxApp extends Application {
     		primaryStage.setScene(scene);
     		
     		// set minimum size of the main view
-    		primaryStage.setMinHeight(200.0);
-    		primaryStage.setMinWidth(400.0);
+    		primaryStage.setMinHeight(250.0);
+    		primaryStage.setMinWidth(450.0);
     		
     		// set main view icon
         	primaryStage.getIcons().add(new Image("images/network.png"));

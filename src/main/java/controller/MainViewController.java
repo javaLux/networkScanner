@@ -112,7 +112,7 @@ public class MainViewController implements Initializable {
     	this.dataBean.getMainViewApp().getTimeLineProgressBar().stop();  	
     }
 
-	// GETTER and SETTER
+	// GETTER
     //
 	public Button getBtnStart() {
 		return this.btnStart;
