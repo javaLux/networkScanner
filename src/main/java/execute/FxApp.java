@@ -1,8 +1,14 @@
 package execute;
 
+import javax.swing.ImageIcon;
+
+import org.slf4j.Logger;
+
 import business.MainViewApp;
 import business.NetworkScan;
+import common.ApplicationLogger;
 import common.DataBean;
+import common.ErrorBoxSwing;
 import common.FxmlUtil;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -12,6 +18,9 @@ import javafx.stage.Stage;
 
 
 public class FxApp extends Application {
+	
+	// Thread safe singleton of the application logger
+	private static Logger LOGGER = ApplicationLogger.getAppLogger();
 	
 	// Data bean
 	private DataBean dataBean = DataBean.getInstance();
@@ -27,10 +36,15 @@ public class FxApp extends Application {
 			
 			NetworkScan.getInstance().initLocalHostData();
 			
-		} catch (Exception e) {
+		} catch (Exception ex) {
 			
-			// TODO Log the exception and display a error information
-			e.printStackTrace();
+			// Log the exception and display a error information
+			LOGGER.error("Failed to get local host IP/MAC address.", ex);
+			ErrorBoxSwing.showErrorMessage(DataBean.APP_NAME + " - Launch failed",
+					"Failed to get IP/MAC address from local host.\nPlease check your security manager settings." + "\nApplication will closed. For more informations, see the log file.",
+					new ImageIcon("src/main/resources/images/wheelChair.png"));
+			
+			System.exit(1);
 		}
 	}
 	
@@ -74,14 +88,12 @@ public class FxApp extends Application {
     		this.dataBean.getMainViewController().getLblLocalHostIP().setText(NetworkScan.getInstance().getIpLocalHost());
     		this.dataBean.getMainViewController().getLblLocalHostMac().setText(NetworkScan.getInstance().getMacAddressLocalHost());
     		
-    		primaryStage.show();
-    	
+    		primaryStage.show(); 	
     	}
 	}
 	
 	public static void main(String[] args) {
 		launch(args);
 	}
-
 
 }

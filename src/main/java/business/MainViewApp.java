@@ -5,6 +5,9 @@ package business;
 
 import java.net.InetAddress;
 
+import org.slf4j.Logger;
+
+import common.ApplicationLogger;
 import common.DataBean;
 import common.OwnSortHelper;
 import javafx.animation.Animation.Status;
@@ -27,6 +30,9 @@ import javafx.util.Duration;
  *
  */
 public class MainViewApp {
+	
+	// Thread safe singleton of the application logger
+	private static Logger LOGGER = ApplicationLogger.getAppLogger();
 
 	// Data bean
 	private DataBean dataBean = DataBean.getInstance();
@@ -225,11 +231,10 @@ public class MainViewApp {
 						        	dataBean.getReachableHosts().add(new ReachableHost(ipAddress.getHostAddress(), ipAddress.getHostName()));
 								}
 								
-							} catch (Exception e) {
+							} catch (Exception ex) {
 								// if exception was thrown -> this current service will be automatically set to state FAILED
-								// TODO: log the exception (log4j)
-								e.printStackTrace();
-								
+								// log the exception
+								LOGGER.error("Failed to check if host '" + hostId + "' is reachable.", ex);								
 							}
 
 							return null;
