@@ -20,9 +20,9 @@ public final class FxmlUtil {
 	}
 	
 	/**
-	 * Method load an given fxml file 
-	 * @param fxmlPath	-> String [path to fxml file]
-	 * @return			->	Parent object with loaded fxml file
+	 * Method load an given FXML file 
+	 * @param fxmlPath	-> String [path to FXML file]
+	 * @return			->	Parent object with loaded FXML file
 	 */
 	public Parent loadFxmlFile(String fxmlPath) {
 		
@@ -34,7 +34,7 @@ public final class FxmlUtil {
 		
 		if(fxmlPath != null) {
 			/*
-			 *  getClass.getResources() works with relativ paths
+			 *  getClass.getResources() works with relative paths
 			 *  that means if an file not in the same class as the
 			 *  called java class than we must give the path from
 			 *  "src" folder as root to the file we will use
@@ -43,7 +43,7 @@ public final class FxmlUtil {
 			 */
 			
 			try {
-				// load fxml file
+				// load FXML file
 				root = FXMLLoader.load(this.getClass().getResource(fxmlPath));
 				
 			} catch (IOException ex) {
@@ -53,7 +53,6 @@ public final class FxmlUtil {
 						errorMsg, iconForErrorBox);				
 				
 			} catch (NullPointerException ex) {
-				// show info box with exception
 				// show info box with exception
 				ErrorBox.show(ex, this.appName, "An error occurent",
 						errorMsg, iconForErrorBox);				

@@ -59,6 +59,98 @@
 					<mainClass>execute.SuperMain</mainClass>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<!-- define the final directory for the required application resources -->
+							<outputDirectory>${project.build.directory}/resources</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/src/main/resources</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<!-- define the final directory for the required application dependencies -->
+							<outputDirectory>${project.build.directory}/lib</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>false</overWriteSnapshots>
+							<overWriteIfNewer>true</overWriteIfNewer>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<!-- Set class path for the JAR, to find classes for executing this application -->
+							<classpathPrefix>lib/</classpathPrefix>
+							<mainClass>execute.SuperMain</mainClass>
+						</manifest>
+						<manifestEntries>
+							<!-- Set entry point of the class path, this is root directory -->
+							<Class-Path>.</Class-Path>
+						</manifestEntries>
+					</archive>
+					<finalName>${project.name}-${project.version}</finalName>
+					<!-- <outputDirectory>${project.build.directory}/${project.artifactId}</outputDirectory> -->
+				</configuration>
+			</plugin>
+
+			<!-- Plugin to handle the final deployment of this application -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<!-- Bundle the .exe and the custom JDK into a final ZIP archive -->
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>${project.name}</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
+								<!-- Handle executing of the plugin with the assembly file -->
+								<descriptor>${project.basedir}/conf/assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>

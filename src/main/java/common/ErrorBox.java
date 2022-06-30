@@ -18,15 +18,15 @@ public class ErrorBox {
 	
 	
 	/**
-	 * Method shows a messagebox if an error ocurend and tell users
-	 * details
+	 * Method shows a message box when an error occurs and tell users
+	 * details to that.
 	 * 
 	 * @param infoMessage   -> message
 	 * @param titleBar      -> title form msgbox
 	 * @param headerMessage -> header message
 	 * @param img           -> Image for infobox
 	 * 
-	 * @return if ok button was clicked -> true, else -> false
+	 * @return if OK button was clicked -> true, else -> false
 	 * 
 	 */
 	public static boolean show(Exception currentEx, String titleBar, String headerMessage,
@@ -46,17 +46,17 @@ public class ErrorBox {
 			errorBox.setContentText(contentMessage);
 		}
 		
-		// shows stacktrace of exception in textarea
+		// shows stack trace of exception in text area
 		if (currentEx != null) {
 			// Create expandable Exception.
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
-			// gives the current Stacktrace from Exception
+			// gives the current stack trace from Exception
 			currentEx.printStackTrace(pw);
-			// formats current Stacktrace to String object
+			// formats current stack trace to String object
 			String exceptionText = sw.toString();
 			
-			// Text Area for the stacktrace
+			// Text Area for the stack trace
 			TextArea textArea = new TextArea(exceptionText);
 			// text is not editable
 			textArea.setEditable(false);
@@ -69,11 +69,11 @@ public class ErrorBox {
 			// set max width and height for the text area
 			textArea.setMaxWidth(Double.MAX_VALUE); 
 			textArea.setMaxHeight(Double.MAX_VALUE);
-			// Abstand zwischen den Elementen in der Text Area festlegen
+			// define distance between the elements in the text area
 			GridPane.setVgrow(textArea, Priority.ALWAYS);
 			GridPane.setHgrow(textArea, Priority.ALWAYS);
 			
-			// set stacktrace (from exception) into msgBox
+			// set stack trace (from exception) into msgBox
 			errorBox.getDialogPane().setExpandableContent(textArea);
 		}
 		
@@ -85,10 +85,10 @@ public class ErrorBox {
 		
 		stage.setAlwaysOnTop(true);
 
-		// get the value if ok button is pressed
+		// get the value if OK button is pressed
 		Optional<ButtonType> result = errorBox.showAndWait();
 		ButtonType button = result.orElse(ButtonType.OK);
-		// if ok button was clicked -> return true
+		// if OK button was clicked -> return true
 		if(button == ButtonType.OK) {
 			return true;
 		}

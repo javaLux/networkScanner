@@ -1,0 +1,21 @@
+IMPORTANT:
+This application was develop with an OpenJDK-18.0.1.1. Please make sure you have this java version running on your machine, before building
+a customize JDK.
+############################################################################################################################################
+
+Commands to create an customize JDK for this application.
+
+* List all required java modules
+jdeps --ignore-missing-deps --module-path <Path to your javaFX SDK> --add-modules=javafx.controls,javafx.fxml --list-deps <Executable JAR file>
+
+* required modules are:
+java.base
+java.desktop
+java.management
+java.naming
+java.scripting
+jdk.unsupported
+java.xml
+
+* use jlink to build an specified JDK
+jlink --compress=2 --strip-debug --module-path jmods --add-modules java.base,java.desktop,java.management,java.naming,java.scripting,jdk.unsupported,java.xml --output customJDK-<jdk-version>
