@@ -10,19 +10,19 @@
 	</formats>
 	<fileSets>
 
-		<!-- Add the executable JAR from target folder to the ZIP -->
+		<!-- Add the EXE from target folder to the ZIP -->
 		<fileSet>
 			<directory>${project.build.directory}</directory>
-			<!-- store the JAR file in root directory of ZIP archive -->
+			<!-- store the EXE file in root directory of ZIP archive -->
 			<outputDirectory />
 			<includes>
-				<include>${project.name}-${project.version}.jar</include>
+				<include>${project.name}.exe</include>
 			</includes>
 		</fileSet>
 
 		<fileSet>
 			<!-- In this case we add a custom JDK with specific modules from the system 
-				JDK, that has the advantage the this size of the JDK is very smaller against the full JDK-->
+				JDK, that has the advantage the size of the JRE is very smaller -->
 			<directory>${project.basedir}/customJDK-18.0.1.1</directory>
 			<outputDirectory>lib/customJDK-18.0.1.1</outputDirectory>
 		</fileSet>

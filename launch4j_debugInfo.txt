@@ -1,0 +1,4 @@
+To enable debug launching mode on launch4j, execute the wrapped EXE file (in the command line) with the follows arguments:
+
+<Path to your EXE> ----l4j-debug		-> normally debug information
+<Path to your EXE> ----l4j-debug-all	-> complete debug information, includes the loaded resources
