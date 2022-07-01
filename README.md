@@ -1,18 +1,19 @@
 # networkScanner
 This project should be showing, how to write an simple network scanner by using JavaFX.
 
-The network scan details:
-* used subnet mask: 255.255.255.0 (CIDR-Suffix /24)
-* supported IP-Protocol: IPv4
-* scan works on OSI layer 3/4
-* used protocols: ICMP/TCP
+## The network scan details:
+* used subnet mask:             `255.255.255.0` (CIDR-Suffix /24)
+* supported IP-Protocol:        `IPv4`
+* scan works on:                `OSI layer 3/4`
+* used protocols:               `ICMP/TCP`
 
 ## Used JDK
-* OpenJDK               Version 18.0.1.1
+* OpenJDK                       Version 18.0.1.1
 
 ## Used Frameworks
-* OpenJfx               Version 18.0.1
-* Log4J
+* OpenJfx                       Version 18.0.1
+* Log4J                         Version 2.17.2
+* Launch4j                      Version 2.1.2
 
 ## Used Build Tool
-* Apache Maven          Version 3.8.5
+* Apache Maven                  Version 3.8.5
